@@ -87,4 +87,4 @@ with tab2:
 # --- RODAPÉ ATUALIZADO ---
 st.markdown("---")
 # Lembre-se de trocar "SEU-USUARIO-AQUI" pelo seu usuário real do LinkedIn!
-st.caption("Feito com ❤️ por **Victor William** | [GitHub](https://github.com/MrBaWhaZaR) | [LinkedIn](https://www.linkedin.com/in/victor-william-674624182/)")
+st.caption("Feito com ❤️ por **Victor William** | [GitHub](https://github.com/MrBaWtaZaR) | [LinkedIn](https://www.linkedin.com/in/victor-william-674624182/)")
