@@ -2,7 +2,7 @@
 
 Um aplicativo web simples construído com Python e Streamlit que usa IA para remover o fundo de imagens.
 
-**[ 🚀 VER O APLICATIVO ONLINE AQUI 🚀 ]( link-do-app-online-vai-aqui )**
+**[ 🚀 VER O APLICATIVO ONLINE AQUI 🚀 ](https://ai-background-remover-avxvadsmejctxnruqwzzw2.streamlit.app/)**
 
 ---
 
