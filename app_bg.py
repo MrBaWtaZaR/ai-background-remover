@@ -14,7 +14,6 @@ st.markdown("Use as abas abaixo para escolher sua ferramenta.")
 tab1, tab2 = st.tabs(["1. Remover Fundo", "2. Comprimir Imagem"])
 
 # --- CÓDIGO DA ABA 1: REMOVER FUNDO ---
-# (Esta parte não muda e está correta)
 with tab1:
     st.header("Remova o fundo de qualquer imagem")
     
@@ -43,7 +42,6 @@ with tab1:
         st.info("Por favor, faça o upload de uma imagem (JPG, PNG, WEBP).")
 
 # --- CÓDIGO DA ABA 2: COMPRIMIR IMAGEM ---
-# (Esta é a parte que corrigimos)
 with tab2:
     st.header("Reduza o tamanho de imagens sem perder (quase) nada")
     
@@ -64,14 +62,10 @@ with tab2:
             with st.spinner("Compressão em andamento..."):
                 buf = io.BytesIO()
 
-                # --- !!! AQUI ESTÁ A CORREÇÃO !!! ---
-                # 1. Converte para RGB (necessário para JPEG, remove transparência)
                 if img.mode != "RGB":
                     img = img.convert("RGB")
                     
-                # 2. Salva como JPEG usando a QUALIDADE do slider
                 img.save(buf, format="JPEG", quality=quality_slider)
-                # --- FIM DA CORREÇÃO ---
                 
                 byte_im = buf.getvalue()
                 new_size = len(byte_im)
@@ -90,6 +84,7 @@ with tab2:
     else:
         st.info("Por favor, faça o upload de uma imagem para reduzir o tamanho.")
 
-# --- Rodapé ---
+# --- RODAPÉ ATUALIZADO ---
 st.markdown("---")
-st.caption("Feito com ❤️ por **Victor William** para o Portfólio.")
+# Lembre-se de trocar "SEU-USUARIO-AQUI" pelo seu usuário real do LinkedIn!
+st.caption("Feito com ❤️ por **Victor William** | [GitHub](https://github.com/MrBaWhaZaR) | [LinkedIn](https://www.linkedin.com/in/victor-william-674624182/)")
