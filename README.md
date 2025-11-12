@@ -18,7 +18,7 @@ A simple web app that allows users to upload an image (PNG, JPG, WEBP) and get b
 #### How to Run Locally
 1.  Clone this repository:
     ```bash
-    git clone [URL_DO_SEU_REPO_AQUI]
+    git clone (https://github.com/MrBaWtaZaR/ai-background-remover)
     cd nome-da-pasta
     ```
 2.  Create and activate a virtual environment:
@@ -51,7 +51,7 @@ A simple web app that allows users to upload an image (PNG, JPG, WEBP) and get b
   #### Como Rodar Localmente
   1.  Clone este repositório:
       ```bash
-      git clone [URL_DO_SEU_REPO_AQUI]
+      git clone https://github.com/MrBaWtaZaR/ai-background-remover
       cd nome-da-pasta
       ```
   2.  Crie e ative um ambiente virtual:
