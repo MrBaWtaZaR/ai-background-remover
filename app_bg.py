@@ -4,43 +4,92 @@ from PIL import Image
 import io
 
 # --- Configuração da Página ---
-st.set_page_config(layout="centered", page_title="AI Background Remover")
+st.set_page_config(layout="centered", page_title="Estúdio de Imagem IA")
 
 # --- Título ---
-st.title("🤖 AI Background Remover")
-st.markdown("Faça o upload de uma imagem e a IA removerá o fundo para você.")
+st.title("🤖 Estúdio de Imagem IA")
+st.markdown("Use as abas abaixo para escolher sua ferramenta.")
 
-# --- Seção de Upload ---
-uploaded_file = st.file_uploader("Escolha uma imagem...", type=["png", "jpg", "jpeg", "webp"])
+# --- Criação das Abas ---
+tab1, tab2 = st.tabs(["1. Remover Fundo", "2. Comprimir Imagem"])
 
-if uploaded_file is not None:
-    # 1. Carregar a imagem
-    input_image = Image.open(uploaded_file)
+# --- CÓDIGO DA ABA 1: REMOVER FUNDO ---
+# (Esta parte não muda e está correta)
+with tab1:
+    st.header("Remova o fundo de qualquer imagem")
     
-    st.image(input_image, caption="Sua imagem original", use_container_width=True)
+    bg_uploader = st.file_uploader("Escolha uma imagem para remover o fundo...", type=["png", "jpg", "jpeg", "webp"], key="bg_remover")
+
+    if bg_uploader is not None:
+        input_image = Image.open(bg_uploader)
+        st.image(input_image, caption="Sua imagem original", use_container_width=True)
+        
+        with st.spinner("🤖 A IA está trabalhando... Removendo o fundo..."):
+            output_image = remove(input_image)
+        
+        st.image(output_image, caption="Imagem com fundo removido", use_container_width=True)
+
+        buf = io.BytesIO()
+        output_image.save(buf, format="PNG")
+        byte_im = buf.getvalue()
+
+        st.download_button(
+            label="Download Imagem (Fundo Transparente)",
+            data=byte_im,
+            file_name=f"{bg_uploader.name.split('.')[0]}_sem_fundo.png",
+            mime="image/png"
+        )
+    else:
+        st.info("Por favor, faça o upload de uma imagem (JPG, PNG, WEBP).")
+
+# --- CÓDIGO DA ABA 2: COMPRIMIR IMAGEM ---
+# (Esta é a parte que corrigimos)
+with tab2:
+    st.header("Reduza o tamanho de imagens sem perder (quase) nada")
     
-    # 2. Processar a imagem (Remover o fundo)
-    with st.spinner("🤖 A IA está trabalhando... Removendo o fundo..."):
-        output_image = remove(input_image)
-    
-    st.image(output_image, caption="Imagem com fundo removido", use_container_width=True)
+    compress_uploader = st.file_uploader("Escolha uma imagem para comprimir...", type=["png", "jpg", "jpeg", "webp"], key="compressor")
 
-    # 3. Preparar a imagem para Download
-    buf = io.BytesIO()
-    output_image.save(buf, format="PNG")
-    byte_im = buf.getvalue()
+    if compress_uploader is not None:
+        img = Image.open(compress_uploader)
+        
+        st.image(img, caption="Sua imagem original", use_container_width=True)
+        
+        st.subheader("Opções de Compressão")
+        quality_slider = st.slider("Qualidade (1 = Baixa, 100 = Alta)", 1, 100, 85)
+        
+        original_size = compress_uploader.size
+        st.write(f"Tamanho original: **{original_size / 1024:.2f} KB**")
+        
+        if st.button("Comprimir Imagem"):
+            with st.spinner("Compressão em andamento..."):
+                buf = io.BytesIO()
 
-    # 4. Criar o botão de Download
-    st.download_button(
-        label="Download Imagem (Fundo Transparente)",
-        data=byte_im,
-        file_name=f"{uploaded_file.name.split('.')[0]}_sem_fundo.png",
-        mime="image/png"
-    )
+                # --- !!! AQUI ESTÁ A CORREÇÃO !!! ---
+                # 1. Converte para RGB (necessário para JPEG, remove transparência)
+                if img.mode != "RGB":
+                    img = img.convert("RGB")
+                    
+                # 2. Salva como JPEG usando a QUALIDADE do slider
+                img.save(buf, format="JPEG", quality=quality_slider)
+                # --- FIM DA CORREÇÃO ---
+                
+                byte_im = buf.getvalue()
+                new_size = len(byte_im)
+                
+                st.success(f"Tamanho comprimido: **{new_size / 1024:.2f} KB**")
+                
+                st.image(byte_im, caption="Imagem comprimida", use_container_width=True)
+                
+                st.download_button(
+                    label="Download Imagem Comprimida",
+                    data=byte_im,
+                    file_name=f"{compress_uploader.name.split('.')[0]}_comprimido.jpg",
+                    mime="image/jpeg"
+                )
 
-else:
-    st.info("Por favor, faça o upload de uma imagem (JPG, PNG, WEBP).")
+    else:
+        st.info("Por favor, faça o upload de uma imagem para reduzir o tamanho.")
 
-# --- NOSSA NOVA PARTE: O RODAPÉ ---
+# --- Rodapé ---
 st.markdown("---")
 st.caption("Feito com ❤️ por **Victor William** para o Portfólio.")
